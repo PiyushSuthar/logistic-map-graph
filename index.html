@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Logistic Map</title>
+  </head>
+  <body>
+    <form id="form">
+      <label>Number of Years</label>
+      <input type="number" min="0" id="iterations" placeholder="Iterations" />
+      <br />
+      <label
+        >Ratio of current Population to the Maximum Population (That's from 0 to
+        1)</label
+      >
+      <input type="number" min="0" max="1" step="0.01" id="x" placeholder="x" />
+      <br />
+      <label>The Growth rate each year!</label>
+      <input type="number" step="0.01" id="r" placeholder="r" />
+      <br />
+      <button type="submit">Generate</button>
+    </form>
+    <div class="container">
+      <canvas id="myChart"></canvas>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"
+      integrity="sha256-uVEHWRIr846/vAdLJeybWxjPNStREzOlqLMXjW/Saeo="
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      var ctx = document.getElementById("myChart").getContext("2d");
+      function getLogisticMap(x, r) {
+        return r * x * (1 - x);
+      }
+
+      function getData(current = 0.2, ITERATIONS, r = 2) {
+        let arr = [];
+        for (let i = 0; i < ITERATIONS; i++) {
+          let map = getLogisticMap(current, r);
+          arr.push(map);
+          current = map;
+        }
+        return arr;
+      }
+
+      const data = getData(0.1, 50, 2);
+
+      var myChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: Array(data.length)
+            .fill(0)
+            .map((_, i) => i),
+          datasets: [
+            {
+              label: "Growth",
+              data: data,
+
+              borderColor: [
+                "rgba(255, 99, 132, 1)",
+                "rgba(54, 162, 235, 1)",
+                "rgba(255, 206, 86, 1)",
+                "rgba(75, 192, 192, 1)",
+                "rgba(153, 102, 255, 1)",
+                "rgba(255, 159, 64, 1)",
+              ],
+              borderWidth: 0.5,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              suggestedMax: 1,
+            },
+          },
+          responsive: true,
+        },
+      });
+
+      const IterationsInput = document.getElementById("iterations");
+      const xInput = document.getElementById("x");
+      const rInput = document.getElementById("r");
+      const form = document.getElementById("form");
+
+      form.addEventListener("submit", (e) => {
+        console.log("Generating");
+        e.preventDefault();
+        const data = getData(xInput.value, IterationsInput.value, rInput.value);
+        myChart.data.labels = Array(data.length)
+          .fill(0)
+          .map((_, i) => i);
+        myChart.data.datasets.forEach((dataset) => {
+          dataset.data = data;
+        });
+        myChart.update();
+      });
+    </script>
+  </body>
+</html>
