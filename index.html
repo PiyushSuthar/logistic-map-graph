@@ -22,6 +22,7 @@
       <br />
       <button type="submit">Generate</button>
     </form>
+    <button id="animate">Animate</button>
     <div class="container">
       <canvas id="myChart"></canvas>
     </div>
@@ -99,6 +100,30 @@
           dataset.data = data;
         });
         myChart.update();
+      });
+
+      const wait = async (milliseconds) =>
+        new Promise((resolve) => setTimeout(resolve, milliseconds));
+
+      async function run(isRunning) {
+        for (let i = 0; i < 400; i++) {
+          const data = getData(0.49, 100, i / 100);
+          myChart.data.labels = Array(data.length)
+            .fill(0)
+            .map((_, i) => i);
+          myChart.data.datasets.forEach((dataset) => {
+            dataset.data = data;
+          });
+          myChart.update();
+          if (i === 400) isRunning = false;
+          await wait(100);
+        }
+      }
+      let isRunning = false;
+      document.getElementById("animate").addEventListener("click", (e) => {
+        if (isRunning) return;
+        isRunning = true;
+        run(isRunning);
       });
     </script>
   </body>
