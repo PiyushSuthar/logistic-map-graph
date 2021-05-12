@@ -4,7 +4,7 @@ Logistic Map is a one-dimensional discrete-time map that, despite its formal sim
 
 Mathematically, the logistic map is written as:  
 
-![Logistic Map Equation](https://i.imgur.com/lxcUB8K.png)
+![Logistic Map Equation](https://raw.githubusercontent.com/w3Abhishek/logistic-map-graph/main/Logistic_Map.png)
 
 Check out [Wikipedia](https://en.wikipedia.org/wiki/Logistic_map) to know more about this.
 
